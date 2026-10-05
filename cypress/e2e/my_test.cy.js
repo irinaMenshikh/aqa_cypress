@@ -1,7 +1,10 @@
 import HomePage from "../pages/HomePage";
+import GaragePage from "../pages/GaragePage";
+import ExpensesPage from "../pages/ExpensesPage";
 
 describe('homework cypress', () => {
     beforeEach(() => {
+
       HomePage.visit();
     })
 
@@ -30,7 +33,7 @@ describe('homework cypress', () => {
             .and('have.attr', 'appscrollto', 'contactsSection');
     });
 
-    
+
     it('finds footer logo', () => {
         HomePage.getFooterLogo().should('be.visible');
     });
@@ -58,5 +61,24 @@ describe('homework cypress', () => {
         HomePage.getCopyrightText().should('be.visible');
     });
 
+
+    it('logs in with valid credentials', () => {
+        cy.env(['userEmail', 'userPassword']).then(({ userEmail, userPassword }) => {
+            HomePage.login(userEmail, userPassword);
+        });
+    });
+
+
+
+     it('adds a new car and fuel expense for it', () => {
+        cy.env(['userEmail', 'userPassword']).then(({ userEmail, userPassword }) => {
+            HomePage.login(userEmail, userPassword);
+
+            cy.url().should('include', '/garage');
+            GaragePage.fillCarForm('Audi', 'TT', '15900');
+            ExpensesPage.visit();
+            ExpensesPage.addFuelExpense('Audi TT', '15901', '50', '1000');
+        });
+    });
 
 })
