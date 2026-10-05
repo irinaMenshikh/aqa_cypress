@@ -1,6 +1,6 @@
 class ExpensesPage {
     visit() {
-        cy.get('a[href="/panel/expenses"]').click();
+        cy.get('a.sidebar_btn[href="/panel/expenses"]').click();
         cy.url().should('include', '/panel/expenses');
     }
 

@@ -24,6 +24,16 @@ class GaragePage {
         return cy.contains('.car_name', `${brand} ${model}`).first().closest('.car');
     }
 
+    closeAddCarModalIfOpen() {
+        cy.get('body').then(($body) => {
+            const $modal = $body.find('.modal.show');
+
+            if ($modal.length) {
+                cy.wrap($modal).find('button.close').click();
+            }
+        });
+    }
+
 
     fillCarForm(brand, model, mileage) {
        this.getAddCarButton().click();
@@ -32,6 +42,8 @@ class GaragePage {
         this.getMileageInput().type(mileage);
         this.getAddButton().click();
         this.getCarCard(brand, model).should('be.visible');
+        this.closeAddCarModalIfOpen();
+        cy.get('.modal.show').should('not.exist');
     }
 
 
