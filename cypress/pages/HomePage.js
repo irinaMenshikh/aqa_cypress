@@ -61,7 +61,7 @@ class HomePage {
 
    fillLoginForm(email, password) {
     cy.get('[name="email"]').type(email);
-    cy.get('[name="password"]').type(password);
+    cy.get('[name="password"]').type(password, { sensitive: true });
     cy.get('.modal-footer').find('.btn.btn-primary').click();
     }
 
