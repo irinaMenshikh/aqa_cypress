@@ -4,7 +4,11 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "cy:open:qauto1": "cypress open --config-file cypress.qauto1.config.js",
+    "cy:open:qauto2": "cypress open --config-file cypress.qauto2.config.js",
+    "cy:run:qauto1": "cypress run --config-file cypress.qauto1.config.js",
+    "cy:run:qauto2": "cypress run --config-file cypress.qauto2.config.js"
   },
   "repository": {
     "type": "git",
@@ -19,6 +23,10 @@
   },
   "homepage": "https://github.com/irinaMenshikh/aqa_cypress#readme",
   "devDependencies": {
-    "cypress": "^16.1.0"
+    "cypress": "^16.1.0",
+    "mochawesome": "^8.1.1"
+  },
+  "allowScripts": {
+    "cypress@16.1.0": true
   }
 }

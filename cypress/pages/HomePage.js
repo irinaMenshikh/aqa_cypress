@@ -1,15 +1,15 @@
 class HomePage {
-    username = 'guest';
-    password = 'welcome2qauto';
 
-    visit () {
+   visit() {
+    cy.env(['basicAuthUsername', 'basicAuthPassword']).then(({ basicAuthUsername, basicAuthPassword }) => {
         cy.visit('/', {
             auth: {
-                username: this.username,
-                password: this.password
+                username: basicAuthUsername,
+                password: basicAuthPassword
             }
         });
-    }
+    });
+}
 
     getGuestButton () {
         return cy.get('header').find('.header-link.-guest');
@@ -55,7 +55,23 @@ class HomePage {
         return cy.get('footer').contains('Hillel IT school');
     }
 
-    
+   clickSignIn() {
+    this.getSignInButton().click();
+}
+
+   fillLoginForm(email, password) {
+    cy.get('[name="email"]').type(email);
+    cy.get('[name="password"]').type(password);
+    cy.get('.modal-footer').find('.btn.btn-primary').click();
+    }
+
+    login(email, password) {
+    this.clickSignIn();
+    this.fillLoginForm(email, password);
+    }
+
+
+
 
 }
 
