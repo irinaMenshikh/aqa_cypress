@@ -64,7 +64,7 @@ describe('homework cypress', () => {
 
     it('logs in with valid credentials', () => {
         cy.env(['userEmail', 'userPassword']).then(({ userEmail, userPassword }) => {
-            HomePage.login(userEmail, userPassword);
+            cy.login(userEmail, userPassword);
         });
     });
 
@@ -72,7 +72,7 @@ describe('homework cypress', () => {
 
      it('adds a new car and fuel expense for it', () => {
         cy.env(['userEmail', 'userPassword']).then(({ userEmail, userPassword }) => {
-            HomePage.login(userEmail, userPassword);
+            cy.login(userEmail, userPassword);
 
             cy.url().should('include', '/garage');
             GaragePage.fillCarForm('Audi', 'TT', '15900');
