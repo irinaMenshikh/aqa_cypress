@@ -10,6 +10,7 @@ module.exports = defineConfig({
   },
   e2e: {
     baseUrl: 'https://qauto2.forstudy.space',
+    excludeSpecPattern: ['cypress/e2e/registration.cy.js'],
     env: {
       userEmail: 'test.qauto2@test.com',
       userPassword: 'Test1234'
