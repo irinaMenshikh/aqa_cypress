@@ -18,6 +18,20 @@ Cypress.Commands.add('login', (email, password) => {
     cy.url().should('include', '/panel/garage');
 });
 
+Cypress.Commands.add('createExpense', (expense) => {
+    return cy.env(['basicAuthUsername', 'basicAuthPassword']).then(
+        ({ basicAuthUsername, basicAuthPassword }) => cy.request({
+            method: 'POST',
+            url: '/api/expenses',
+            auth: {
+                username: basicAuthUsername,
+                password: basicAuthPassword,
+            },
+            body: expense,
+        })
+    );
+});
+
 Cypress.Commands.overwrite('type', (originalFn, element, text, options = {}) => {
     if (options.sensitive) {
         options.log = false;
