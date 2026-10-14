@@ -28,6 +28,26 @@ class ExpensesPage {
         return cy.get('.modal-footer').contains('button', 'Add');
     }
 
+    selectCar(vehicle) {
+        cy.get('#carSelectDropdown').then(($button) => {
+            if ($button.text().trim() !== vehicle) {
+                cy.wrap($button).click();
+                cy.get('.dropdown-menu')
+                    .should('be.visible')
+                    .contains('.dropdown-item:not(.disabled)', vehicle)
+                    .click();
+            }
+        });
+        cy.get('#carSelectDropdown').should('contain.text', vehicle);
+    }
+
+    expectExpenseInTable({ mileage, liters, totalCost }) {
+        cy.get('tbody tr').first()
+            .should('contain.text', mileage)
+            .and('contain.text', liters)
+            .and('contain.text', totalCost);
+    }
+
     addFuelExpense(vehicle, mileage, liters, totalCost) {
         this.getAddExpenseButton().click();
         this.getVehicleSelect().find('option').then(($options) => {
