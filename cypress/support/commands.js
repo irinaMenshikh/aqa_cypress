@@ -9,6 +9,15 @@
 // ***********************************************
 //
 //
+// cy.env() is built into Cypress 15+. Older versions (e.g. 13.x) don't have it,
+// so provide a compatible command that reads values via Cypress.env().
+if (typeof cy.env !== 'function') {
+    Cypress.Commands.add('env', (keys) => {
+        const values = Object.fromEntries(keys.map((key) => [key, Cypress.env(key)]));
+        return cy.wrap(values, { log: false });
+    });
+}
+
 // -- This is a parent command --
 Cypress.Commands.add('login', (email, password) => {
     cy.get('header').find('.btn.btn-outline-white.header_signin').click();

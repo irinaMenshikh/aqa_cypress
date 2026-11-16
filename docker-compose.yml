@@ -1,0 +1,10 @@
+services:
+  cypress-firefox:
+    # Older Cypress version; the cypress/included image ships Chrome, Edge and Firefox
+    image: cypress/included:13.17.0
+    working_dir: /e2e
+    volumes:
+      - ./:/e2e
+      # keep the container's own Linux node_modules instead of the Windows host ones
+      - /e2e/node_modules
+    entrypoint: ["sh", "-c", "npm ci && npx cypress run --config-file cypress.qauto1.config.js --browser firefox"]
