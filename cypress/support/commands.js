@@ -9,6 +9,15 @@
 // ***********************************************
 //
 //
+// cy.env() is built into Cypress 15+. Older versions (e.g. 13.x) don't have it,
+// so provide a compatible command that reads values via Cypress.env().
+if (typeof cy.env !== 'function') {
+    Cypress.Commands.add('env', (keys) => {
+        const values = Object.fromEntries(keys.map((key) => [key, Cypress.env(key)]));
+        return cy.wrap(values, { log: false });
+    });
+}
+
 // -- This is a parent command --
 Cypress.Commands.add('login', (email, password) => {
     cy.get('header').find('.btn.btn-outline-white.header_signin').click();
@@ -29,6 +38,21 @@ Cypress.Commands.add('createExpense', (expense) => {
             },
             body: expense,
         })
+    );
+});
+
+// Deletes every car of the logged-in user (the garage is limited to 25 cars)
+Cypress.Commands.add('deleteAllCars', () => {
+    return cy.env(['basicAuthUsername', 'basicAuthPassword']).then(
+        ({ basicAuthUsername, basicAuthPassword }) => {
+            const auth = { username: basicAuthUsername, password: basicAuthPassword };
+
+            cy.request({ url: '/api/cars', auth }).then(({ body }) => {
+                body.data.forEach((car) => {
+                    cy.request({ method: 'DELETE', url: `/api/cars/${car.id}`, auth });
+                });
+            });
+        }
     );
 });
 

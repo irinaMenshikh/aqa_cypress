@@ -1,0 +1,47 @@
+name: Cypress tests in Docker
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  cypress-run:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    # All steps below run inside this Docker image (Node 20, Chrome 118, Firefox 118, Edge 118)
+    container:
+      image: cypress/browsers:node-20.9.0-chrome-118.0.5993.88-1-ff-118.0.2-edge-118.0.2088.46-1
+      options: --user 1001
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run Cypress tests
+        run: npx cypress run --config-file cypress.qauto1.config.js --browser chrome
+        env:
+          # Cypress exposes CYPRESS_* variables through Cypress.env()
+          CYPRESS_basicAuthUsername: ${{ secrets.BASIC_AUTH_USERNAME }}
+          CYPRESS_basicAuthPassword: ${{ secrets.BASIC_AUTH_PASSWORD }}
+
+      - name: Upload Mochawesome report
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: cypress-report
+          path: cypress/reports/qauto1
+          retention-days: 14
+
+      - name: Upload screenshots on failure
+        if: ${{ failure() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: cypress-screenshots
+          path: cypress/screenshots
+          retention-days: 14
