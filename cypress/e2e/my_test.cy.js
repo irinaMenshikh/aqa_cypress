@@ -73,6 +73,8 @@ describe('homework cypress', () => {
      it('adds a new car and fuel expense for it', () => {
         cy.env(['userEmail', 'userPassword']).then(({ userEmail, userPassword }) => {
             cy.login(userEmail, userPassword);
+            // The garage is limited to 25 cars, so start from an empty one
+            cy.deleteAllCars();
 
             cy.url().should('include', '/garage');
             GaragePage.fillCarForm('Audi', 'TT', '15900');

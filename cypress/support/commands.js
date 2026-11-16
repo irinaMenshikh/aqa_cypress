@@ -41,6 +41,21 @@ Cypress.Commands.add('createExpense', (expense) => {
     );
 });
 
+// Deletes every car of the logged-in user (the garage is limited to 25 cars)
+Cypress.Commands.add('deleteAllCars', () => {
+    return cy.env(['basicAuthUsername', 'basicAuthPassword']).then(
+        ({ basicAuthUsername, basicAuthPassword }) => {
+            const auth = { username: basicAuthUsername, password: basicAuthPassword };
+
+            cy.request({ url: '/api/cars', auth }).then(({ body }) => {
+                body.data.forEach((car) => {
+                    cy.request({ method: 'DELETE', url: `/api/cars/${car.id}`, auth });
+                });
+            });
+        }
+    );
+});
+
 Cypress.Commands.overwrite('type', (originalFn, element, text, options = {}) => {
     if (options.sensitive) {
         options.log = false;

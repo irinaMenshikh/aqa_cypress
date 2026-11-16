@@ -8,6 +8,8 @@ describe('Car and expense API verification', () => {
         cy.env(['userEmail', 'userPassword']).then(({ userEmail, userPassword }) => {
             cy.login(userEmail, userPassword);
         });
+        // The garage is limited to 25 cars, so start from an empty one
+        cy.deleteAllCars();
     });
 
     it('creates a car through UI, verifies it by API, creates an expense by API, and checks it in UI', () => {
